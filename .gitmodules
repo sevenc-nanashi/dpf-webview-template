@@ -1,0 +1,9 @@
+[submodule "deps/DPF"]
+	path = deps/DPF
+	url = https://github.com/DISTRHO/DPF.git
+[submodule "deps/choc"]
+	path = deps/choc
+	url = https://github.com/Tracktion/choc
+[submodule "deps/MimeTypes"]
+	path = deps/MimeTypes
+	url = https://github.com/lasselukkari/MimeTypes.git
