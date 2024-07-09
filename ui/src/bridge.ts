@@ -1,14 +1,14 @@
 import { Plugin, inject, ref, computed, ComputedRef } from "vue";
 
 declare function hostGetParameter(index: number): Promise<number>;
-declare function hostGetParameter(index: number, value: number): Promise<void>;
+declare function hostSetParameter(index: number, value: number): Promise<void>;
 
 export const getParam = (index: number) => {
   return hostGetParameter(index);
 };
 
 export const setParam = (index: number, value: number) => {
-  hostGetParameter(index, value);
+  hostSetParameter(index, value);
 };
 
 export const bridgePlugin: Plugin = {
@@ -28,7 +28,7 @@ export const bridgePlugin: Plugin = {
       },
     });
 
-    hostGetParameter(0).then((value) => {
+    getParam(0).then((value) => {
       param1Value.value = value;
     });
     app.provide("param1", param1);

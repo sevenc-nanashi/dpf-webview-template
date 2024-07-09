@@ -20,7 +20,10 @@ const zipArchivePlugin: Plugin = {
     const output = createWriteStream(`${import.meta.dirname}/../src/ui.zip`);
 
     for (const file in bundle) {
-      archive.append(`dist/${file}`, { name: file });
+      const bundleFile = bundle[file];
+      const content =
+        bundleFile.type === "asset" ? bundleFile.source : bundleFile.code;
+      archive.append(Buffer.from(content), { name: file });
     }
 
     const pipelinePromise = pipeline(archive, output);

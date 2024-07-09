@@ -63,12 +63,15 @@ public:
     options.fetchResource = [this](const std::string &url)
         -> std::optional<choc::ui::WebView::Options::Resource> {
       for (const auto &item : zipFile->items) {
-        if (item.filename == url) {
+        if ((url == "/" && item.filename == "index.html") ||
+            // Strip leading slash
+            item.filename == url.substr(1)) {
           auto contentStream = item.createReader();
           std::string content((std::istreambuf_iterator<char>(*contentStream)),
                               std::istreambuf_iterator<char>());
           return std::make_optional<choc::ui::WebView::Options::Resource>(
-              content, MimeTypes::getType(url.c_str()));
+              content,
+              url == "/" ? "text/html" : MimeTypes::getType(url.c_str()));
         }
       }
       return std::nullopt;
@@ -86,18 +89,16 @@ public:
                         auto index = args[0].getInt64();
                         return choc::value::Value(this->param1);
                       });
-    chocWebView->bind(
-        "hostSetParameter", [this](const choc::value::ValueView &args) {
-          if (args.size() != 2) {
-            return choc::value::Value();
-          }
-          auto index = args[0].getInt64();
-          auto value = args[1].isFloat()
-                           ? args[1].getFloat64()
-                           : static_cast<double>(args[1].getInt64());
-          this->setParameterValue(index, value);
-          return choc::value::Value();
-        });
+    chocWebView->bind("hostSetParameter",
+                      [this](const choc::value::ValueView &args) {
+                        if (args.size() != 2) {
+                          return choc::value::Value();
+                        }
+                        auto index = args[0].getInt64();
+                        auto value = args[1].get<double>();
+                        this->setParameterValue(index, value);
+                        return choc::value::Value();
+                      });
 
     // Mount to window
 #ifdef CHOC_WINDOWS
