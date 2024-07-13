@@ -1,6 +1,6 @@
 # DPF Webview + Vite Template
 
-- DPF: [DISTRHO/DPF](httos://github.com/DISTRHO/DPF)
+- DPF: [DISTRHO/DPF](https://github.com/DISTRHO/DPF)
 - pnpm: [pnpm](https://pnpm.io/)
 - Vite: [Vite](https://vitejs.dev/)
 
